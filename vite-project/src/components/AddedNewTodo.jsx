@@ -1,13 +1,27 @@
 import { useState } from "react"
+import { useTodoListStore } from "../states/todo"
 
 const AddedNewTodo = () => {
     const [title, setTitle] = useState()
     const [content, setContent] = useState()
+    const [completed, setCompleted] = useState(false)
+    const addTodo = useTodoListStore(store => store.addTodo)
     const handlerSubmit = (e) => {
         e.preventDefault()
-        console.log(title , content)
+
+        if (title === undefined || completed === undefined || content === undefined) {
+            alert('Please enter a values')
+        }
+        else {
+            addTodo({
+                title: title,
+                content: content,
+                completed: completed
+            })
+        }
         setContent('')
         setTitle('')
+        setCompleted(false)
     }
     return (
         <div className='form'>
@@ -17,9 +31,14 @@ const AddedNewTodo = () => {
                     setTitle(e.target.value);
                 }} />
                 <span>Todo Content</span>
-                <textarea name="" id="" cols="30" rows="10" value={content} onChange={(e) => {
+                <textarea name="content" id="content" cols="30" rows="10" value={content} onChange={(e) => {
                     setContent(e.target.value);
                 }}></textarea>
+                <div>
+                    <input type="checkbox" name="completed" id="completed" checked={completed} onChange={(e) => {
+                        setCompleted(e.target.checked)
+                    }} /> Successful ?
+                </div>
                 <button>Submit</button>
             </form>
         </div>
